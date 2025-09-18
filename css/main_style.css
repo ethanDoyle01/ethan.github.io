@@ -1,3 +1,12 @@
+/*
+Colorblind safe color palette from colorbrewer2.org.
+#d7191c - Red
+#fdae61 - Orange
+#ffffbf - Off Yellow
+#abd9e9 - Light Blue
+#2c7bb6 - Blue
+*/
+
 body {
   background-color: #ffffbf;
   color: #abd9e9;
