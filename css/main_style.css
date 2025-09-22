@@ -45,3 +45,13 @@ h1 {
   position: relative;
   left: 50px;
 }
+
+#copyright {
+  bottom: 20px;
+  margin: 0;
+  padding:0;
+  text-align: center;
+  position: relative;
+  left:50%;
+  transform: translateX(-50%) translateY(-50%);
+}
