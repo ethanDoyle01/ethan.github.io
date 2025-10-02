@@ -21,13 +21,19 @@ function welcome() {
 document.write(welcome());
 
 function webmap_table() {
-    document.write("<table width=100%>");
+    document.write("<table width='100%'>");
     for (var row = 0; row < webmaps.length; row++) {
+        let col = 0;
         document.write("<tr>");
-        for (var column = 0; column < webmaps[0].length; column++) {
-            document.write("<td>" + webmaps[row][column] + "</td>");
-        }
+        document.write("<td>" + webmaps[row][col] + "</td>");
+        document.write("<td>" + webmaps[row][++col] + "</td>");
         document.write("</tr>");
+
+        document.write("<tr>");
+        document.write("<td colspan='2'>" + webmaps[row][++col] + "</td>");
+        document.write("</tr>");
+
+        document.write("<tr><td colspan='2' style='height: 16px'></td></tr>");
     }
     document.write("</table>");
     return "";
