@@ -8,7 +8,14 @@
   <link rel="stylesheet" type="text/css" href="css/map_style.css">
   <script src="https://unpkg.com/leaflet@1.9.1/dist/leaflet.js" integrity="sha256-
   NDI0K41gVbWqfkkaHj15IzU7PtMoelkzyKp8TOaFQ3s=" crossorigin=""></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css">
+  <script src="https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.js"></script>
+  <!-- <script src="https://https://unpkg.com/leaflet-control-geocoder@3.3.1/dist/Control.Geocoder.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-controlgeocoder/dist/Control.Geocoder.css" /> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.js"></script>
   <script src="javascript/secret_keys.js"></script>
+  <script src="javascript/marker_code.js"></script>
   <title>Ethan Doyle</title>
   <!-- All Styling for this HTML document is contained in this external css
   file -->
@@ -51,24 +58,77 @@
         </script>
       </p>
     </div>
-    <h3>Geocoding Map</h3>
+    <h3>The Seven Wonders</h3>
     <br>
     <div id="mapid" style="width: 600px; height: 400px; margin: auto; bottom: 30px;">
       <script>
-        var mymap = L.map('mapid').setView([51.505, -0.09], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?access_token={accessToken}', {maxZoom: 18, id: 'mapbox.mapbox - traffic - v1', accessToken:
-        mapbox_access_token}).addTo(mymap);
-        var marker = L.marker([51.5, -0.09]).addTo(mymap);
-        var circle = L.circle([51.508, -0.11], { color: 'red', fillColor: '#f03',
-        fillOpacity: 0.5, radius: 500}).addTo(mymap);
-        var polygon = L.polygon([[51.509, -0.08], [51.503, -0.06], [51.51, -
-        0.047]]).addTo(mymap);
-        marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-        circle.bindPopup("I am a circle.");
-        polygon.bindPopup("I am a polygon.");
-        marker.on('click', function(e){ mymap.setView(e.latlng, 14);})
-        circle.on('click', function(e){ mymap.setView(e.latlng, 13);})
-        polygon.on('click', function(e){ mymap.setView(e.latlng, 13);})
+        var mymap = L.map('mapid');
+          L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {}).addTo(mymap);
+
+          var tajMarker = L.marker([27.174961, 78.042385], {icon: tajIcon}).addTo(mymap); //India's Taj Mahal
+          let tajPopupData = 
+          "<b><h1>India's Taj Mahal</h1></b> <img src=images/Wonders/taj_mahal.jpg width=100px height=100px /> <p>The Taj Mahal is an ivory-white marble mausoleum on the right bank of the river Yamuna in Agra, Uttar Pradesh, India. It was commissioned in 1631 by the fifth Mughal emperor, Shah Jahan, to house the tomb of his beloved wife, Mumtaz Mahal; it also houses the tomb of Shah Jahan himself.</p>";
+          tajMarker.bindPopup(tajPopupData).openPopup();
+          tajMarker.on('click', function (e) { mymap.setView(e.latlng, 14); })
+
+          var wallMarker = L.marker([40.334245, 116.477652], {icon: greatwallIcon}).addTo(mymap); //Great Wall of China
+          let wallPopupData = 
+          "<b><h1>Great Wall of China</h1></b> <img src=images/Wonders/great_wall.jpg width=100px height=100px /> <p>The Great Wall of China is a series of fortifications in China. They were built across the historical northern borders of ancient Chinese states and Imperial China as protection against various nomadic groups from the Eurasian Steppe.</p>";
+          wallMarker.bindPopup(wallPopupData).openPopup();
+          wallMarker.on('click', function (e) { mymap.setView(e.latlng, 14); })
+
+          var petraMarker = L.marker([30.328611, 35.441944], {icon: petraIcon}).addTo(mymap); //Petra in Jordan
+          let petraPopupData = 
+          "<b><h1>Petra in Jordan</h1></b> <img src=images/Wonders/petra.jpg width=100px height=100px /> <p>Petra is a famous archaeological site in Jordan's southwestern desert. Dating to around 300 B.C., it was the capital of the Nabatean Kingdom. Accessed via a narrow canyon called Al Siq, it contains tombs and temples carved into pink sandstone cliffs, earning its nickname, the Rose City.</p>";
+          petraMarker.bindPopup(petraPopupData).openPopup();
+          petraMarker.on('click', function (e) { mymap.setView(e.latlng, 14); })
+
+          var christMarker = L.marker([-22.951389, -43.2108334], {icon: christIcon}).addTo(mymap); //Brazil's statue of Christ the Redeemer
+          let christPopupData = 
+          "<b><h1>Brazil's statue of Christ the Redeemer</h1></b> <img src=images/Wonders/christ_the_redeemer.jpg width=100px height=100px /> <br> <p>Christ the Redeemer is an Art Deco statue of Jesus in Rio de Janeiro, Brazil, created by French-Polish sculptor Paul Landowski and built by Brazilian engineer Heitor da Silva Costa, in collaboration with French engineer Albert Caquot.</p>";
+          christMarker.bindPopup(christPopupData).openPopup();
+          christMarker.on('click', function (e) { mymap.setView(e.latlng, 14); })
+
+          var machuMarker = L.marker([-13.163056, -72.545556], {icon: machuIcon}).addTo(mymap); //Peru's Machu Picchu
+          let machuPopupData = 
+          "<b><h1>Peru's Machu Picchu</h1></b> <img src=images/Wonders/machu_picchu.jpg width=100px height=100px /> <p>Machu Picchu is an Incan citadel set high in the Andes Mountains in Peru, above the Urubamba River valley. Built in the 15th century and later abandoned, it’s renowned for its sophisticated dry-stone walls that fuse huge blocks without the use of mortar, intriguing buildings that play on astronomical alignments and panoramic views.</p>";
+          machuMarker.bindPopup(machuPopupData).openPopup();
+          machuMarker.on('click', function (e) { mymap.setView(e.latlng, 14); })
+
+          var chichenMarker = L.marker([20.682778, -88.569167], {icon: chichenIcon}).addTo(mymap); //Mexico's Chichen Itza pyramid
+          let chichenPopupData = 
+          "<b><h1>Mexico's Chichen Itza Pyramid</h1></b> <img src=images/Wonders/chichen_itza.jpg width=100px height=100px /> <p>El Castillo, also known as the Temple of Kukulcan is a Mesoamerican step-pyramid that dominates the center of the Chichen Itza archaeological site in the Mexican state of Yucatán</p>";
+          chichenMarker.bindPopup(chichenPopupData).openPopup();
+          chichenMarker.on('click', function (e) { mymap.setView(e.latlng, 14); })
+
+          var colosseumMarker = L.marker([41.890169, 12.492269], {icon: colosseumIcon}).addTo(mymap); //The Colosseum in Rome
+          let colosseumPopupData = 
+          "<b><h1>The Colosseum in Rome</h1></b> <img src=images/Wonders/colosseum.jpg width=100px height=100px /> <p>The Colosseum is an elliptical amphitheatre in the centre of the city of Rome, Italy, just east of the Roman Forum. It is the largest ancient amphitheatre ever built, and is the largest standing amphitheatre in the world.</p>";
+          colosseumMarker.bindPopup(colosseumPopupData).openPopup();
+          colosseumMarker.on('click', function (e) { mymap.setView(e.latlng, 14); })
+
+          
+
+          var ZoomViewer = L.Control.extend({
+            onAdd: function () {
+              var gauge = L.DomUtil.create('div');
+              gauge.style.width = '100px';
+              gauge.style.background = 'rgba(255,255,255,0.5)';
+              gauge.style.textAlign = 'right';
+              mymap.on('zoomstart zoom zoomend', function (ev) {
+                gauge.innerHTML = 'Zoom Level: ' + mymap.getZoom();
+              })
+              return gauge;
+            }
+          });
+          (new ZoomViewer).addTo(mymap);
+          L.control.resetView({
+            position: "topleft",
+            title: "Reset view",
+            latlng: L.latLng([0, 0]),
+            zoom: 1,
+          }).addTo(mymap);
+      mymap.setView([0, 0], 1);
       </script>
     </div>
   </div>
