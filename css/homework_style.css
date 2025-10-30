@@ -1,0 +1,72 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+html,
+body,
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+#map {
+    position: relative;
+    z-index: 0;
+}
+
+.dropdown {
+    position: absolute;
+    top: 10px;
+    left: 50px;
+    z-index: 1;
+    background-color: rgb(255, 255, 255);
+    padding: 12px 16px;
+}
+
+.dropdown-content {
+    right: 0;
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 130px;
+}
+
+.dropdown-content a {
+    display: block;
+    color: rgb(0, 119, 255);
+    padding: 12px 16px;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+html,
+body,
+#viewDiv {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#optionsDiv {
+    background-color: dimgray;
+    color: white;
+    padding: 10px;
+    width: 350px;
+}
+
+.esri-popup .esri-popup-header .esri-title {
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.esri-popup .esri-popup-body .esri-popup-content {
+    font-size: 14px;
+}
