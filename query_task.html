@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title> Query Task </title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.21/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.21/"> </script>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        #optionsDiv {
+            background-color: dimgray;
+            color: white;
+            padding: 10px;
+            width: 350px;
+        }
+
+        .esri-popup .esri-popup-header .esri-title {
+            font-size: 18px;
+            font-weight: bolder;
+        }
+
+        .esri-popup .esri-popup-body .esri-popup-content {
+            font-size: 14px;
+        }
+    </style>
+    <script>
+        require(["esri/Map", "esri/views/MapView", "esri/layers/TileLayer", "esri/layers/MapImageLayer", "esri/widgets/BasemapGallery", "esri/layers/GraphicsLayer",
+            "esri/tasks/QueryTask", "esri/tasks/support/Query",
+            "dojo/_base/array", "dojo/dom", "dojo/on", "dojo/domReady!"], function
+            (Map, MapView, TileLayer, MapImageLayer, BasemapGallery, GraphicsLayer, QueryTask, Query, arrayUtils, dom, on) {
+            var CitiesRenderer = {
+                type: "simple",
+                symbol: {
+                    type: "simple-marker",
+                    size: 3,
+                    color: "red",
+                    style: "circle",
+                    outline: {
+                        width: 1,
+                        color: "red"
+                    }
+                },
+                label: "Cities"
+            };
+            var CitiesLayer = new MapImageLayer({
+                url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer",
+                sublayers: [{
+                    id: 0,
+                    renderer: CitiesRenderer,
+                    opacity: 0.4
+                }]
+            });
+            var TransportationLayer = new TileLayer({
+                url: "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer"
+            });
+            var map = new Map({
+                basemap: "oceans",
+                layers: [TransportationLayer, CitiesLayer]
+            });
+            var view = new MapView({
+                container: "viewDiv",
+                map: map,
+                zoom: 10,
+                center: [-118.2095, 34.0866]
+            });
+            var basemapGallery = new BasemapGallery({
+                view: view
+            });
+            view.ui.add(basemapGallery, { position: "top-right" });
+            view.when(function () {
+                view.ui.add("optionsDiv", "bottom-right");
+                on(dom.byId("doBtn"), "click", doQuery);
+            });
+            var attributeName = dom.byId("attSelect");
+            var expressionSign = dom.byId("signSelect");
+            var value = dom.byId("valSelect");
+            function doQuery() {
+                resultsLayer.removeAll();
+                params.where = attributeName.value + expressionSign.value + value.value;
+                qTask.execute(params).then(getResults).catch(promiseRejected);
+            }
+            function getResults(response) {
+                var popResults = arrayUtils.map(
+                    response.features,
+                    function (feature) {
+                        feature.popupTemplate = popupTemplate;
+                        return feature;
+                    }
+                );
+                resultsLayer.addMany(popResults);
+                view.goTo(popResults).then(function () {
+                    view.popup.open({
+                        features: popResults,
+                        featureMenuOpen: true,
+                        updateLocationEnabled: true
+                    });
+                });
+                dom.byId("printResults").innerHTML = popResults.length + " results found!";
+            };
+            function promiseRejected(error) {
+                console.error("Promise rejected: ", error.message, " Parameter values: ", attributeName.value,
+                    expressionSign.value, value.value);
+            }
+            var popUrl = "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/CaliforniaCities/FeatureServer/0";
+            var popupTemplate = {
+                title: "{City}",
+                fieldInfos: [
+                    {
+                        fieldName: "Population",
+                        label: "Population",
+                        format: {
+                            places: 0,
+                            digitSeperator: true
+                        }
+                    },
+                    {
+                        fieldName: "Household",
+                        label: "Household",
+                        format: {
+                            places: 0,
+                            digitSeperator: true
+                        }
+                    }
+                ],
+                content: "<b>Population:" + "</b> {Population} " + "<br><b>Households:</b> {Household}" + "<br><b>Latitude:</b> { Latitude } " + " < br > <b>Longitude:</b> { Longitude } "
+            };
+            var resultsLayer = new GraphicsLayer();
+            var qTask = new QueryTask({ url: popUrl });
+            var params = new Query({ returnGeometry: true, outFields: ["*"] });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="viewDiv"></div>
+    <div class="esri-widget" id="optionsDiv">
+        <h2>Cities in California</h2>
+        <select class="esri-widget" id="attSelect">
+            <option value="Population">Population</option>
+            <option value="Household" selected>Households</option>
+        </select>
+        <select class="esri-widget" id="signSelect">
+            <option value="&gt;">is greater than</option>
+            <option value="&lt;">is less than</option>
+        </select>
+        <select class="esri-widget" id="valSelect">
+            <option value="10000">10,000</option>
+            <option value="50000">50,000</option>
+            <option value="100000">100,000</option>
+            <option value="150000">150,000</option>
+            <option value="200000">200,000</option>
+        </select>
+        <br>
+        <br>
+        <button class="esri-widget" id="doBtn">Do Query</button>
+        <br>
+        <p><span id="printResults"></span></p>
+    </div>
+</body>
+
+</html>
